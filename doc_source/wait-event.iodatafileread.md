@@ -74,7 +74,7 @@ Maintenance operations such as `VACUUM` and `ANALYZE` are important\. We recomme
 
 The autovacuum feature is automatically triggered for a table when the following formula is true\.
 
-```
+```sql
 pg_stat_user_tables.n_dead_tup > (pg_class.reltuples x autovacuum_vacuum_scale_factor) + autovacuum_vacuum_threshold
 ```
 
@@ -89,7 +89,7 @@ The view `pg_stat_user_tables` and catalog `pg_class` have multiple rows\. One r
 
 To find tables consuming space unnecessarily, you can use functions from the PostgreSQL `pgstattuple` extension\. This extension \(module\) is available by default on all RDS for PostgreSQL DB instances and can be instantiated on the instance with the following command\.
 
-```
+```sql
 CREATE EXTENSION pgstattuple;
 ```
 
@@ -97,7 +97,7 @@ For more information about this extension, see [pgstattuple](https://www.postgre
 
 The query shown in the listing returns results from tables for which your database user \(role\) has read permissions\. 
 
-```
+```sql
 SELECT current_database(), schemaname, tblname, bs*tblpages AS real_size,
   (tblpages-est_tblpages)*bs AS extra_size,
   CASE WHEN tblpages - est_tblpages > 0
@@ -164,7 +164,7 @@ FROM (
 
 To find bloated indexes and estimate the amount of space consumed unnecessarily on the tables for which you have read privileges, you can run the following query\.
 
-```
+```sql
 -- WARNING: rows with is_na = 't' are known to have bad statistics ("name" type is not supported).
 -- This query is compatible with PostgreSQL 8.2 and later.
 
@@ -258,7 +258,7 @@ ORDER BY 2,3,4;
 
 To find tables that are eligible to be autovacuumed, run the following query\.
 
-```
+```sql
 --This query shows tables that need vacuuming and are eligible candidates.
 --The following query lists all tables that are due to be processed by autovacuum. 
 -- During normal operation, this query should return very little.
